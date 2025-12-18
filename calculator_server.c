@@ -9,11 +9,29 @@
 struct CALCULATOR *
 calculator_proc_1_svc(struct CALCULATOR *argp, struct svc_req *rqstp)
 {
-	static struct CALCULATOR  result;
+	static __thread struct CALCULATOR result;
 
-	/*
-	 * insert server code here
-	 */
+	(void)rqstp;
+	result.op = argp->op;
+	result.arg1 = argp->arg1;
+	result.arg2 = argp->arg2;
+	switch (argp->op) {
+	case ADD:
+		result.result = argp->arg1 + argp->arg2;
+		break;
+	case SUB:
+		result.result = argp->arg1 - argp->arg2;
+		break;
+	case MUL:
+		result.result = argp->arg1 * argp->arg2;
+		break;
+	case DIV:
+		result.result = (argp->arg2 != 0.0f) ? (argp->arg1 / argp->arg2) : 0.0f;
+		break;
+	default:
+		result.result = 0.0f;
+		break;
+	}
 
 	return &result;
 }
