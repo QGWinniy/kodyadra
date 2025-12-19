@@ -33,7 +33,7 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case CALCULATOR_PROC:
 		_xdr_argument = (xdrproc_t) xdr_CALCULATOR;
-		_xdr_result = (xdrproc_t) xdr_CALCULATOR;
+		_xdr_result = (xdrproc_t) xdr_float;
 		local = (char *(*)(char *, struct svc_req *)) calculator_proc_1_svc;
 		break;
 

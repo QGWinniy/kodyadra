@@ -22,7 +22,6 @@ struct CALCULATOR {
 	int op;
 	float arg1;
 	float arg2;
-	float result;
 };
 typedef struct CALCULATOR CALCULATOR;
 
@@ -31,14 +30,14 @@ typedef struct CALCULATOR CALCULATOR;
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define CALCULATOR_PROC 1
-extern  struct CALCULATOR * calculator_proc_1(struct CALCULATOR *, CLIENT *);
-extern  struct CALCULATOR * calculator_proc_1_svc(struct CALCULATOR *, struct svc_req *);
+extern  float * calculator_proc_1(struct CALCULATOR *, CLIENT *);
+extern  float * calculator_proc_1_svc(struct CALCULATOR *, struct svc_req *);
 extern int calculator_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define CALCULATOR_PROC 1
-extern  struct CALCULATOR * calculator_proc_1();
-extern  struct CALCULATOR * calculator_proc_1_svc();
+extern  float * calculator_proc_1();
+extern  float * calculator_proc_1_svc();
 extern int calculator_prog_1_freeresult ();
 #endif /* K&R C */
 

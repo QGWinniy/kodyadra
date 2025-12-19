@@ -62,16 +62,11 @@ void *processing_thread(void *ptr) {
     if (!svc_sendreply(data->transp, (xdrproc_t) xdr_CALCULATOR, (char *)&result)) {
         svcerr_systemerr(data->transp);
     }
-
-    /* Освобождаем память аргументов, выделенную rpc (важно!) */
     if (!svc_freeargs(data->transp, (xdrproc_t) xdr_CALCULATOR, (char *)&data->args)) {
         fprintf(stderr, "unable to free arguments\n");
     }
 
-    /* Освобождаем нашу структуру данных */
     free(data);
-
-    /* Завершаем поток */
     pthread_exit(NULL);
     return NULL;
 }
@@ -90,9 +85,6 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
         return;
 
     case CALCULATOR_PROC:
-        /* * Выделяем память под данные для потока в куче,
-         * так как локальные переменные исчезнут после выхода из функции
-         */
         t_data = (struct thread_data *) malloc(sizeof(struct thread_data));
         if (t_data == NULL) {
             fprintf(stderr, "Memory allocation failed\n");
@@ -101,7 +93,6 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
         t_data->transp = transp;
 
-        /* Получаем аргументы и сохраняем их сразу в структуру t_data */
         memset ((char *)&t_data->args, 0, sizeof (t_data->args));
         if (!svc_getargs (transp, (xdrproc_t) xdr_CALCULATOR, (caddr_t) &t_data->args)) {
             svcerr_decode (transp);
@@ -109,7 +100,6 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
             return;
         }
 
-        /* Настройка атрибутов для detached потока */
         pthread_attr_init(&attr);
         ret = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
         if (ret != 0) {
@@ -118,7 +108,6 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
             return;
         }
 
-        /* Создание потока */
         if (pthread_create(&th, &attr, processing_thread, (void *)t_data) != 0) {
             fprintf(stderr, "Error creating thread\n");
             free(t_data);
@@ -127,10 +116,7 @@ calculator_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
         pthread_attr_destroy(&attr);
 
-        /* * ВАЖНО: Мы НЕ вызываем svc_sendreply здесь.
-         * Мы возвращаемся в главный цикл svc_run, чтобы слушать новые запросы.
-         * Ответ отправит поток.
-         */
+
         break;
 
     default:

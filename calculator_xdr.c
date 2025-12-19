@@ -16,7 +16,5 @@ xdr_CALCULATOR (XDR *xdrs, CALCULATOR *objp)
 		 return FALSE;
 	 if (!xdr_float (xdrs, &objp->arg2))
 		 return FALSE;
-	 if (!xdr_float (xdrs, &objp->result))
-		 return FALSE;
 	return TRUE;
 }
