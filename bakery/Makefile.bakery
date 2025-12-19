@@ -12,9 +12,9 @@ SOURCES_SVC.c =
 SOURCES_SVC.h = 
 SOURCES.x = bakery.x
 
-TARGETS_SVC.c = bakery_svc.c bakery_server.c   
-TARGETS_CLNT.c = bakery_clnt.c bakery_client.c   
-TARGETS = bakery.h   bakery_clnt.c bakery_svc.c bakery_client.c bakery_server.c
+TARGETS_SVC.c = bakery_svc.c bakery_server.c
+TARGETS_CLNT.c = bakery_clnt.c bakery_client.c
+TARGETS = bakery.h bakery_clnt.c bakery_svc.c bakery_client.c bakery_server.c
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
@@ -22,7 +22,7 @@ OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 
 CFLAGS += -g -I/usr/include/tirpc
 LDLIBS += -ltirpc
-RPCGENFLAGS = 
+RPCGENFLAGS =
 
 # Targets 
 
@@ -43,4 +43,3 @@ $(SERVER) : $(OBJECTS_SVC)
 
  clean:
 	 $(RM) core $(TARGETS) $(OBJECTS_CLNT) $(OBJECTS_SVC) $(CLIENT) $(SERVER)
-

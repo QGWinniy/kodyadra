@@ -1,6 +1,6 @@
 program BAKERY_PROG {
     version BAKERY_VER {
-        int GET_TICKET(int client_id) = 1;
-        int GET_PROCESSING_TIME(int ticket_number) = 2;
+        int GET_TICKET_NUMBER(int) = 1;
+        hyper GET_SERVICE_TIME(int) = 2;
     } = 1;
 } = 0x30000001;
