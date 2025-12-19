@@ -1,0 +1,30 @@
+# Makefile.calculator
+CC = cc
+CFLAGS = -g -I/usr/include/tirpc -pthread
+LDFLAGS = -ltirpc -pthread
+
+all: calculator_client calculator_server
+
+calculator.h: calculator.x
+	rpcgen -C calculator.x
+
+calculator_clnt.c: calculator.x
+calculator_svc.c: calculator.x
+calculator_xdr.c: calculator.x
+
+calculator_client: calculator_clnt.o calculator_client.o calculator_xdr.o
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+calculator_server: calculator_svc.o calculator_server.o calculator_xdr.o
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+calculator_client.o: calculator_client.c calculator.h
+calculator_server.o: calculator_server.c calculator.h
+calculator_clnt.o: calculator_clnt.c calculator.h
+calculator_svc.o: calculator_svc.c calculator.h
+calculator_xdr.o: calculator_xdr.c calculator.h
+
+clean:
+	rm -f *.o calculator_client calculator_server calculator_clnt.c calculator_svc.c calculator_xdr.c calculator.h
+
+.PHONY: all clean
